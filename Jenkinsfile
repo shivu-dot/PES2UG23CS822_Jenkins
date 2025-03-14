@@ -1,37 +1,33 @@
 pipeline {
     agent any
     stages {
-        // stage('Clone repository') {
-        //     steps {
-        //         checkout([$class: 'GitSCM',
-        //         branches: [[name: '*/main']],
-        //         userRemoteConfigs: [[url: 'https://github.com/Jatinsharma1539/Jenkins.git']]])
-        //     }
-        // }
-
         stage('Build') {
             steps {
-                build 'PES2UG19CS155-1'
-                sh 'g++ main.cpp -o output'
+                sh 'mvn clean install'
+                echo 'Build Stage Successful'
             }
         }
-
         stage('Test') {
             steps {
-                sh './output'
+                sh 'mvn test'
+                echo 'Test Stage Successful'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
             }
         }
-
         stage('Deploy') {
             steps {
-                echo 'deploy'
+                sh 'mvn deploy'
+                echo 'Deployment Successful'
             }
         }
     }
-
     post {
         failure {
-            error 'Pipeline failed'
+            echo 'Pipeline failed'
         }
     }
 }
