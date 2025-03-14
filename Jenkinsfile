@@ -1,15 +1,18 @@
 pipeline {
     agent any
+    environment {
+        PATH = "$PATH:/usr/bin"
+    }
     stages {
         stage('Build') {
             steps {
-                sh '/usr/bin/mvn clean install' // Use the full Maven path
+                sh 'mvn clean install'
                 echo 'Build Stage Successful'
             }
         }
         stage('Test') {
             steps {
-                sh '/usr/bin/mvn test'
+                sh 'mvn test'
                 echo 'Test Stage Successful'
             }
             post {
@@ -20,7 +23,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh '/usr/bin/mvn deploy'
+                sh 'mvn deploy'
                 echo 'Deployment Successful'
             }
         }
