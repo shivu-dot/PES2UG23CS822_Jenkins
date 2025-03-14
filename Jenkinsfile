@@ -3,13 +3,13 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                sh '/usr/bin/mvn clean install' // Use the full Maven path
                 echo 'Build Stage Successful'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh '/usr/bin/mvn test'
                 echo 'Test Stage Successful'
             }
             post {
@@ -20,7 +20,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'mvn deploy'
+                sh '/usr/bin/mvn deploy'
                 echo 'Deployment Successful'
             }
         }
