@@ -8,7 +8,7 @@ pipeline {
         stage('Clone repository') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/<user>/<repo>.git'
+                    url: 'https://github.com/shivu-dot/PES2UG23CS822_Jenkins.git'
             }
         }
         stage('Install dependencies') {
@@ -28,8 +28,9 @@ pipeline {
         }
         stage('Push Docker image') {
             steps {
-                sh 'docker build -t <user>/<image>:$BUILD_NUMBER .'
-                sh 'docker push <user>/<image>:$BUILD_NUMBER'
+                sh 'docker build -t pes2ug23cs822/pes2ug23cs822:$BUILD_NUMBER .'
+                sh 'docker push pes2ug23cs822/pes2ug23cs822:$BUILD_NUMBER'
+
             }
         }
     }
