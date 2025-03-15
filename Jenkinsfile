@@ -1,27 +1,36 @@
 pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                sh 'g++ main.cpp -o output'  // Compile C++ file
-                echo 'Build Stage Successful'
-            }
-        }
-        stage('Test') {
-            steps {
-                sh './output'  // Run compiled C++ file
-                echo 'Test Stage Successful'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deployment Successful'
-            }
+    agent {
+        docker {
+            image 'node:14'
         }
     }
-    post {
-        failure {
-            echo 'Pipeline failed'
+    stages {
+        stage('Clone repository') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/<user>/<repo>.git'
+            }
+        }
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Build application') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+        stage('Test application') {
+            steps {
+                sh 'npm test'
+            }
+        }
+        stage('Push Docker image') {
+            steps {
+                sh 'docker build -t <user>/<image>:$BUILD_NUMBER .'
+                sh 'docker push <user>/<image>:$BUILD_NUMBER'
+            }
         }
     }
 }
