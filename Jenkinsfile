@@ -1,29 +1,24 @@
 pipeline {
-    agent any  // Use 'any' instead of 'docker'
-    
+    agent any
+
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                sh 'g++ hello.cpp -o output'
-                echo 'Build Stage Successful'
+                checkout scm
+                sh 'ls -R'  // Debugging step to check file locations
             }
         }
+
+        stage('Build') {
+            steps {
+                sh 'g++ main/hello.cpp -o output'  // Correct path
+            }
+        }
+
         stage('Test') {
             steps {
                 sh './output'
-                echo 'Test Stage Successful'
             }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deployment Successful'
-            }
-        }
-    }
-    
-    post {
-        failure {
-            echo 'Pipeline failed'
         }
     }
 }
