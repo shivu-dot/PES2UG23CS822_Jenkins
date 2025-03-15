@@ -1,29 +1,20 @@
 pipeline {
     agent any
-    environment {
-        PATH = "$PATH:/usr/bin"
-    }
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean install'
+                sh 'g++ main.cpp -o output'  // Compile C++ file
                 echo 'Build Stage Successful'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh './output'  // Run compiled C++ file
                 echo 'Test Stage Successful'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                }
             }
         }
         stage('Deploy') {
             steps {
-                sh 'mvn deploy'
                 echo 'Deployment Successful'
             }
         }
